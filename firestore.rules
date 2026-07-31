@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Settings config - accessible by anyone to read, writers must be signed in
+    match /settings/config {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // User settings - strictly owned
+    match /userSettings/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Users collection - strictly owned
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Unified projects - accessible to read and write by authenticated users
+    match /projects/{projectId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Niches - accessible to read and write by authenticated users
+    match /niches/{nicheId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Products and nested content - accessible to read and write by authenticated users
+    match /products/{productId} {
+      allow read, write: if isSignedIn();
+
+      match /angles/{angleId} {
+        allow read, write: if isSignedIn();
+      }
+
+      match /offers/{offerId} {
+        allow read, write: if isSignedIn();
+      }
+
+      match /copies/{copyId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+  }
+}

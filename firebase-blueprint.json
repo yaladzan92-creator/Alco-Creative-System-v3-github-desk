@@ -1,0 +1,179 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and subscription metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "plan": { "type": "string", "enum": ["free", "pro", "enterprise"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "plan"]
+    },
+    "Niche": {
+      "title": "Niche Research",
+      "description": "Research data for specific market niches",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "demandScore": { "type": "number" },
+        "competitionScore": { "type": "number" },
+        "painPoints": { "type": "array", "items": { "type": "string" } },
+        "audienceAnalysis": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name"]
+    },
+    "Product": {
+      "title": "Digital Product",
+      "description": "Details of the digital product being sold",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "price": { "type": "number" },
+        "usp": { "type": "string" },
+        "description": { "type": "string" },
+        "nicheId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "price"]
+    },
+    "Offer": {
+      "title": "Sales Offer",
+      "description": "The specific offer or stack for a product",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "headline": { "type": "string" },
+        "bonuses": { "type": "array", "items": { "type": "string" } },
+        "guarantee": { "type": "string" },
+        "scarcity": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId"]
+    },
+    "AdAngle": {
+      "title": "Ad Angle",
+      "description": "Marketing angle for advertising campaigns",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "angleType": { "type": "string" },
+        "hook": { "type": "string" },
+        "headline": { "type": "string" },
+        "bodyText": { "type": "string" },
+        "performanceScore": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "hook"]
+    },
+    "Project": {
+      "title": "Business Project",
+      "description": "Unified 8-step business development project",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "currentStep": { "type": "number" },
+        "nicheData": { "type": "object", "description": "Step 1 & Step 4 Output" },
+        "audienceData": { "type": "object", "description": "Step 2 Output" },
+        "painPointData": { "type": "object", "description": "Step 3 Output" },
+        "positioningData": { "type": "object", "description": "Step 5 Output" },
+        "offerData": { "type": "object", "description": "Step 6 Output" },
+        "marketingAngles": { "type": "object", "description": "Step 7 Output" },
+        "copyDirection": { "type": "object", "description": "Step 8 Output" },
+        "adsVariations": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "currentStep"]
+    },
+    "UserSettings": {
+      "title": "User Personal Settings",
+      "description": "Secure storage for user-specific API keys and configurations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "geminiApiKey": { "type": "string", "description": "User's individual Gemini API Key" },
+        "isDemoMode": { "type": "boolean", "default": false },
+        "onboardingComplete": { "type": "boolean", "default": false },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId"]
+    },
+    "AdCopy": {
+      "title": "Ad Copy",
+      "description": "Generated copywriting variations",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["type", "content"]
+    },
+    "AppConfig": {
+      "title": "Application Configuration",
+      "description": "Global settings for branding and AI behavior",
+      "type": "object",
+      "properties": {
+        "developerPassword": { "type": "string" },
+        "rebrandingPassword": { "type": "string" },
+        "appName": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "primaryColor": { "type": "string" },
+        "aiAssistantName": { "type": "string" },
+        "supportContact": { "type": "string" },
+        "companyName": { "type": "string" },
+        "faviconUrl": { "type": "string" },
+        "dashboardText": { "type": "string" },
+        "footerText": { "type": "string" }
+      },
+      "required": ["developerPassword", "rebrandingPassword"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Unified business projects"
+    },
+    "/userSettings/{userId}": {
+      "schema": "UserSettings",
+      "description": "User specific configurations"
+    },
+    "/settings/config": {
+      "schema": "AppConfig",
+      "description": "Global app configuration"
+    },
+    "/niches/{nicheId}": {
+      "schema": "Niche",
+      "description": "Niche research data"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Product details"
+    },
+    "/products/{productId}/angles/{angleId}": {
+      "schema": "AdAngle",
+      "description": "Marketing angles for advertising campaigns"
+    },
+    "/products/{productId}/offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Sales offer lists"
+    },
+    "/products/{productId}/copies/{copyId}": {
+      "schema": "AdCopy",
+      "description": "Copywriting variations"
+    }
+  }
+}

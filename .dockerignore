@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.dev
+.git
+.github
+*.log
+npm-debug.log*
+Dockerfile
+DEPLOYMENT_GUIDE.md
+DEPLOYMENT_CHECKLIST.md
+firebase-blueprint.json
+firestore.rules
+firebase-applet-config.json
