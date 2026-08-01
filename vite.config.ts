@@ -5,7 +5,9 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
-  const base = env.VITE_BASE_PATH === 'github-pages' ? './' : '/';
+  const isGithubPagesBuild =
+    env.VITE_BASE_PATH === 'github-pages' || process.env.GITHUB_ACTIONS === 'true';
+  const base = isGithubPagesBuild ? './' : '/';
   return {
     base,
     plugins: [react(), tailwindcss()],
